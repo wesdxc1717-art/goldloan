@@ -7,18 +7,31 @@ export default function BottomForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
-  const [agree, setAgree] =useState(false);
+  const [agree, setAgree] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!name || !phone || !amount) {
-      alert("모든 항목을 입력해주세요.");
+    if (!name.trim()) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+
+    if (!phone.trim()) {
+      alert("연락처를 입력해주세요.");
+      return;
+    }
+
+    if (!amount) {
+      alert("희망금액을 선택해주세요.");
       return;
     }
 
     if (!agree) {
-      alert("개인정보 동의가 필요합니다.");
+      alert("개인정보 수집 및 이용에 동의해주세요.");
       return;
     }
+
+    setLoading(true);
 
     const { error } = await supabase.from("applications").insert([
       {
@@ -29,22 +42,26 @@ export default function BottomForm() {
     ]);
 
     if (error) {
-      console.log(error);
+      setLoading(false);
       alert(error.message);
       return;
     }
 
-    await fetch("/api/telegram", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        phone,
-        amount,
-      }),
-    });
+    try {
+      await fetch("/api/telegram", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          phone,
+          amount,
+        }),
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
     alert("무료 안심조회 신청이 완료되었습니다.");
 
@@ -52,140 +69,174 @@ export default function BottomForm() {
     setPhone("");
     setAmount("");
     setAgree(false);
+    setLoading(false);
   };
 
   return (
     <div
       id="bottom-form"
-      className="fixed bottom-0 left-0 w-full bg-white border-t border-[#C9A227] shadow-2xl z-50"
+      className="fixed bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
     >
-      <div className="max-w-7xl mx-auto px-4 py-3">
+      <div className="max-w-7xl mx-auto px-4 py-4">
 
-        <div className="flex flex-col lg:flex-row items-center gap-3">
+        <div className="flex flex-col lg:flex-row gap-4 lg:items-center">
 
-          <div className="min-w-[170px] text-center lg:text-left">
+          <div className="lg:min-w-[170px] text-center lg:text-left">
+
             <h3 className="text-2xl font-black text-[#C9A227]">
               GOLDLOAN
             </h3>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm font-semibold text-gray-700">
               무료 안심조회
             </p>
-          </div>
 
-          {/* 이름 */}
-          <input
+          </div>
+                    <input
             type="text"
             placeholder="이름"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="
-              flex-1
               w-full
-              border
-              border-[#C9A227]
+              lg:flex-1
               rounded-xl
+              border-2
+              border-[#C9A227]
               bg-white
               px-4
               py-3
               text-[16px]
-              font-semibold
+              font-bold
               text-black
-              placeholder:text-gray-500
-              placeholder:opacity-100
-              outline-none
-              focus:border-[#C9A227]
+              placeholder:text-gray-400
+              focus:outline-none
               focus:ring-2
-              focus:ring-[#C9A227]/30
+              focus:ring-[#C9A227]
             "
             style={{
               color: "#111827",
               WebkitTextFillColor: "#111827",
-              backgroundColor: "#ffffff",
             }}
           />
 
-          {/* 연락처 */}
           <input
             type="tel"
             placeholder="연락처"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="
-              flex-1
               w-full
-              border
-              border-gray-300
+              lg:flex-1
               rounded-xl
+              border-2
+              border-gray-300
               bg-white
               px-4
               py-3
               text-[16px]
-              font-semibold
+              font-bold
               text-black
-              placeholder:text-gray-500
-              placeholder:opacity-100
-              outline-none
-              focus:border-[#C9A227]
+              placeholder:text-gray-400
+              focus:outline-none
               focus:ring-2
-              focus:ring-[#C9A227]/30
+              focus:ring-[#C9A227]
             "
             style={{
               color: "#111827",
               WebkitTextFillColor: "#111827",
-              backgroundColor: "#ffffff",
             }}
           />
 
-          {/* 희망금액 */}
           <select
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className="
-              flex-1
               w-full
-              border
-              border-gray-300
+              lg:flex-1
               rounded-xl
+              border-2
+              border-gray-300
               bg-white
               px-4
               py-3
               text-[16px]
-              font-semibold
+              font-bold
               text-black
-              outline-none
-              focus:border-[#C9A227]
+              focus:outline-none
               focus:ring-2
-              focus:ring-[#C9A227]/30
+              focus:ring-[#C9A227]
             "
-            style={{
-              color: "#111827",
-              WebkitTextFillColor: "#111827",
-              backgroundColor: "#ffffff",
-            }}
           >
             <option value="">희망금액 선택</option>
-            <option>100만원 이하</option>
-            <option>300만원</option>
-            <option>500만원</option>
-            <option>1,000만원 이상</option>
-            <option>상담 후 결정</option>
+            <option value="100만원 이하">100만원 이하</option>
+            <option value="300만원">300만원</option>
+            <option value="500만원">500만원</option>
+            <option value="1000만원 이상">1,000만원 이상</option>
+            <option value="상담 후 결정">상담 후 결정</option>
           </select>
+           <div
+  style={{
+    background: "red",
+    padding: "10px",
+    width: "100%",
+  }}
+>
+  TEST
+</div>
 
-          <label className="flex items-center gap-2 whitespace-nowrap text-sm">
-            <input
-              type="checkbox"
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
-            />
-            개인정보 동의
-          </label>
+<label
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    background: "lime",
+    padding: "10px",
+    width: "100%",
+  }}
+>
+  <input
+    type="checkbox"
+    checked={agree}
+    onChange={(e) => setAgree(e.target.checked)}
+    style={{
+      width: "30px",
+      height: "30px",
+    }}
+  />
 
-          <button
+  <span
+    style={{
+      color: "black",
+      fontWeight: "bold",
+      fontSize: "20px",
+    }}
+  >
+    개인정보 동의
+  </span>
+</label>     
+                    <button
+            type="button"
             onClick={handleSubmit}
-            className="bg-[#C9A227] hover:bg-yellow-600 transition text-white font-bold px-8 py-3 rounded-xl whitespace-nowrap"
+            disabled={loading}
+            className="
+              w-full
+              lg:w-auto
+              rounded-xl
+              bg-[#C9A227]
+              px-8
+              py-3
+              text-white
+              text-lg
+              font-bold
+              shadow-lg
+              transition
+              hover:bg-yellow-600
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+            "
           >
-            무료 안심조회
+            {loading ? "신청중..." : "무료 안심조회"}
           </button>
 
         </div>
