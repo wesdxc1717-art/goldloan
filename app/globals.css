@@ -24,3 +24,58 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* ============================
+   모바일 입력창 표시 개선
+============================ */
+
+input,
+textarea,
+select {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  background-color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 600;
+  opacity: 1 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  background: #ffffff !important;
+}
+
+select option {
+  color: #111827;
+  background: #ffffff;
+}
+/* iPhone Safari 자동 스타일 제거 */
+
+input,
+textarea,
+select,
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 12px;
+}
+
+/* 자동완성 시 노란색 제거 */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}

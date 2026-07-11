@@ -7,7 +7,7 @@ export default function BottomForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
-  const [agree, setAgree] = useState(false);
+  const [agree, setAgree] =useState(false);
 
   const handleSubmit = async () => {
     if (!name || !phone || !amount) {
@@ -34,7 +34,6 @@ export default function BottomForm() {
       return;
     }
 
-    // 텔레그램 알림
     await fetch("/api/telegram", {
       method: "POST",
       headers: {
@@ -60,39 +59,110 @@ export default function BottomForm() {
       id="bottom-form"
       className="fixed bottom-0 left-0 w-full bg-white border-t border-[#C9A227] shadow-2xl z-50"
     >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex flex-col lg:flex-row items-center gap-4">
+      <div className="max-w-7xl mx-auto px-4 py-3">
 
-          <div className="min-w-[180px]">
+        <div className="flex flex-col lg:flex-row items-center gap-3">
+
+          <div className="min-w-[170px] text-center lg:text-left">
             <h3 className="text-2xl font-black text-[#C9A227]">
               GOLDLOAN
             </h3>
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-600">
               무료 안심조회
             </p>
           </div>
 
+          {/* 이름 */}
           <input
             type="text"
             placeholder="이름"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="flex-1 border rounded-xl px-4 py-3 outline-none focus:border-[#C9A227]"
+            className="
+              flex-1
+              w-full
+              border
+              border-[#C9A227]
+              rounded-xl
+              bg-white
+              px-4
+              py-3
+              text-[16px]
+              font-semibold
+              text-black
+              placeholder:text-gray-500
+              placeholder:opacity-100
+              outline-none
+              focus:border-[#C9A227]
+              focus:ring-2
+              focus:ring-[#C9A227]/30
+            "
+            style={{
+              color: "#111827",
+              WebkitTextFillColor: "#111827",
+              backgroundColor: "#ffffff",
+            }}
           />
 
+          {/* 연락처 */}
           <input
-            type="text"
+            type="tel"
             placeholder="연락처"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="flex-1 border rounded-xl px-4 py-3 outline-none focus:border-[#C9A227]"
+            className="
+              flex-1
+              w-full
+              border
+              border-gray-300
+              rounded-xl
+              bg-white
+              px-4
+              py-3
+              text-[16px]
+              font-semibold
+              text-black
+              placeholder:text-gray-500
+              placeholder:opacity-100
+              outline-none
+              focus:border-[#C9A227]
+              focus:ring-2
+              focus:ring-[#C9A227]/30
+            "
+            style={{
+              color: "#111827",
+              WebkitTextFillColor: "#111827",
+              backgroundColor: "#ffffff",
+            }}
           />
 
+          {/* 희망금액 */}
           <select
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="flex-1 border rounded-xl px-4 py-3 outline-none focus:border-[#C9A227]"
+            className="
+              flex-1
+              w-full
+              border
+              border-gray-300
+              rounded-xl
+              bg-white
+              px-4
+              py-3
+              text-[16px]
+              font-semibold
+              text-black
+              outline-none
+              focus:border-[#C9A227]
+              focus:ring-2
+              focus:ring-[#C9A227]/30
+            "
+            style={{
+              color: "#111827",
+              WebkitTextFillColor: "#111827",
+              backgroundColor: "#ffffff",
+            }}
           >
             <option value="">희망금액 선택</option>
             <option>100만원 이하</option>
