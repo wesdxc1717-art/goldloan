@@ -71,18 +71,11 @@ select:-webkit-autofill {
 ========================= */
 
 input[type="checkbox"] {
+  width: 24px !important;
+  height: 24px !important;
   appearance: auto !important;
   -webkit-appearance: checkbox !important;
-
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-
-  width: 22px !important;
-  height: 22px !important;
-
   accent-color: #C9A227;
-  cursor: pointer;
 }
 
 /* =========================

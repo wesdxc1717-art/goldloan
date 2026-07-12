@@ -79,7 +79,7 @@ export default function BottomForm() {
     >
       <div className="max-w-7xl mx-auto px-4 py-4">
 
-        <div className="flex flex-col lg:flex-row gap-4 lg:items-center">
+        <div className="flex flex-col gap-4">
 
           <div className="lg:min-w-[170px] text-center lg:text-left">
 
@@ -99,7 +99,7 @@ export default function BottomForm() {
             onChange={(e) => setName(e.target.value)}
             className="
               w-full
-              lg:flex-1
+              flex-1
               rounded-xl
               border-2
               border-[#C9A227]
@@ -127,7 +127,7 @@ export default function BottomForm() {
             onChange={(e) => setPhone(e.target.value)}
             className="
               w-full
-              lg:flex-1
+              flex-1
               rounded-xl
               border-2
               border-gray-300
@@ -153,7 +153,7 @@ export default function BottomForm() {
             onChange={(e) => setAmount(e.target.value)}
             className="
               w-full
-              lg:flex-1
+              flex-1
               rounded-xl
               border-2
               border-gray-300
@@ -175,7 +175,6 @@ export default function BottomForm() {
             <option value="1000만원 이상">1,000만원 이상</option>
             <option value="상담 후 결정">상담 후 결정</option>
           </select>
-           <div
        <label
   style={{
     display: "flex",
