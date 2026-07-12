@@ -176,23 +176,13 @@ export default function BottomForm() {
             <option value="상담 후 결정">상담 후 결정</option>
           </select>
            <div
-  style={{
-    background: "red",
-    padding: "10px",
-    width: "100%",
-  }}
->
-  TEST
-</div>
-
-<label
+       <label
   style={{
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    background: "lime",
-    padding: "10px",
     width: "100%",
+    padding: "10px 0",
   }}
 >
   <input
@@ -202,30 +192,21 @@ export default function BottomForm() {
     style={{
       width: "30px",
       height: "30px",
+      accentColor: "#C9A227",
+      flexShrink: 0,
     }}
   />
 
   <span
     style={{
-      color: "black",
-      fontWeight: "bold",
-      fontSize: "20px",
+      color: "#111827",
+      fontWeight: 700,
+      fontSize: "18px",
     }}
   >
-    개인정보 동의
+    개인정보 수집 및 이용에 동의합니다.
   </span>
-  <div
-  style={{
-    background: "red",
-    color: "white",
-    padding: "10px",
-    textAlign: "center",
-    fontWeight: "bold",
-  }}
->
-  TEST123
-</div>
-</label>     
+</label>
                     <button
             type="button"
             onClick={handleSubmit}
