@@ -214,6 +214,17 @@ export default function BottomForm() {
   >
     개인정보 동의
   </span>
+  <div
+  style={{
+    background: "red",
+    color: "white",
+    padding: "10px",
+    textAlign: "center",
+    fontWeight: "bold",
+  }}
+>
+  TEST123
+</div>
 </label>     
                     <button
             type="button"
