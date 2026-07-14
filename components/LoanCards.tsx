@@ -22,36 +22,36 @@ export default function LoanCards() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-          {loans.map((loan) => (
+          {loans.map((loan) => {
+            const isBusiness = loan.title === "사업자대출";
 
-            <div
-              key={loan.title}
-              className="bg-white rounded-3xl p-10 shadow hover:-translate-y-2 hover:shadow-2xl transition"
-            >
+            return (
+              <div
+                key={loan.title}
+                className="bg-white rounded-3xl p-10 shadow hover:-translate-y-2 hover:shadow-2xl transition"
+              >
+                <div className="text-6xl mb-6">
+                  {loan.icon}
+                </div>
 
-              <div className="text-6xl mb-6">
-                {loan.icon}
+                <h3 className="text-2xl font-bold">
+                  {loan.title}
+                </h3>
+
+                <div className="mt-6 space-y-2 text-gray-600">
+
+                  {!isBusiness && (
+                    <p>✔ 최소 10만원부터</p>
+                  )}
+
+                  <p>✔ 상담 후 결정</p>
+
+                  <p>✔ 간편 상담 가능</p>
+
+                </div>
               </div>
-
-              <h3 className="text-2xl font-bold">
-                {loan.title}
-              </h3>
-
-              <div className="mt-6 space-y-2 text-gray-600">
-
-                <p>✔ 최소 10만원부터</p>
-
-                <p>✔ 상담 후 결정</p>
-
-                <p>✔ 간편 상담 가능</p>
-
-              </div>
-
-            
-
-            </div>
-
-          ))}
+            );
+          })}
 
         </div>
 
