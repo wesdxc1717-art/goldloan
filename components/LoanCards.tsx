@@ -40,15 +40,22 @@ export default function LoanCards() {
 
                 <div className="mt-6 space-y-2 text-gray-600">
 
-                  {!isBusiness && (
-                    <p>✔ 최소 10만원부터</p>
-                  )}
+  {loan.title === "사업자대출" ? (
+    <>
+      <p>✔ 초기사업자도 OK</p>
+      <p>✔ 단기 운영자금도 OK</p>
+      <p>✔ 상담 후 결정</p>
+      <p>✔ 간편 상담 가능</p>
+    </>
+  ) : (
+    <>
+      <p>✔ 최소 10만원부터</p>
+      <p>✔ 상담 후 결정</p>
+      <p>✔ 간편 상담 가능</p>
+    </>
+  )}
 
-                  <p>✔ 상담 후 결정</p>
-
-                  <p>✔ 간편 상담 가능</p>
-
-                </div>
+</div>
               </div>
             );
           })}
