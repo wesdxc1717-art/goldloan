@@ -75,7 +75,7 @@ export default function BottomForm() {
   return (
     <div
   id="bottom-form"
-  className="relative lg:fixed lg:bottom-0 lg:left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
+  className="fixed bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
 >
       <div className="max-w-5xl mx-auto px-3 py-1">
 
