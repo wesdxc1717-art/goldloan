@@ -77,17 +77,17 @@ export default function BottomForm() {
   id="bottom-form"
   className="sticky bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
 >
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-5xl mx-auto px-3 py-1">
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
 
           <div className="lg:min-w-[170px] text-center lg:text-left">
 
-            <h3 className="text-2xl font-black text-[#C9A227]">
+           <h3 className="text-lg font-black text-[#C9A227]">
               GOLDLOAN
             </h3>
 
-            <p className="text-sm font-semibold text-gray-700">
+            <p className="text-xs font-semibold text-gray-700">
               무료 안심조회
             </p>
 
@@ -105,8 +105,8 @@ export default function BottomForm() {
               border-[#C9A227]
               bg-white
               px-4
-              py-3
-              text-[16px]
+              py-1.5
+              text-[15px]
               font-bold
               text-black
               placeholder:text-gray-400
@@ -133,8 +133,8 @@ export default function BottomForm() {
               border-gray-300
               bg-white
               px-4
-              py-3
-              text-[16px]
+              py-2
+              text-[15px]
               font-bold
               text-black
               placeholder:text-gray-400
@@ -159,8 +159,8 @@ export default function BottomForm() {
               border-gray-300
               bg-white
               px-4
-              py-3
-              text-[16px]
+              py-2
+              text-[15px]
               font-bold
               text-black
               focus:outline-none
@@ -181,7 +181,7 @@ export default function BottomForm() {
     alignItems: "center",
     gap: "10px",
     width: "100%",
-    padding: "10px 0",
+    padding: "4px 0",
   }}
 >
   <input
@@ -189,8 +189,8 @@ export default function BottomForm() {
     checked={agree}
     onChange={(e) => setAgree(e.target.checked)}
     style={{
-      width: "30px",
-      height: "30px",
+      width: "20px",
+height: "20px",
       accentColor: "#C9A227",
       flexShrink: 0,
     }}
@@ -200,7 +200,7 @@ export default function BottomForm() {
     style={{
       color: "#111827",
       fontWeight: 700,
-      fontSize: "18px",
+      fontSize: "14px",
     }}
   >
     개인정보 수집 및 이용에 동의합니다.
@@ -215,10 +215,10 @@ export default function BottomForm() {
               lg:w-auto
               rounded-xl
               bg-[#C9A227]
-              px-8
-              py-3
+              px-6
+              py-2
               text-white
-              text-lg
+              text-base
               font-bold
               shadow-lg
               transition
