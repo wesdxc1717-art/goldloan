@@ -74,9 +74,9 @@ export default function BottomForm() {
 
   return (
     <div
-      id="bottom-form"
-      className="fixed bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
-    >
+  id="bottom-form"
+  className="sticky bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
+>
       <div className="max-w-7xl mx-auto px-4 py-4">
 
         <div className="flex flex-col gap-4">
