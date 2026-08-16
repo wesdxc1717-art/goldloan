@@ -60,7 +60,7 @@ export default function BottomForm() {
     setLoading(true);
 
     try {
-      // 1. Supabase DB 저장
+      // 1. Supabase 저장
       const { error: dbError } = await supabase.from("applications").insert([
         {
           name: formData.name,
@@ -74,7 +74,7 @@ export default function BottomForm() {
         console.error("Supabase Error:", dbError);
       }
 
-      // 2. 텔레그램 메시지 발송 API 호출 및 응답 확인
+      // 2. 텔레그램 알림 발송 및 에러 확인
       const telegramMessage = `
 [골드론 무료안심조회 신규 신청]
 - 성함: ${formData.name}
@@ -92,10 +92,9 @@ export default function BottomForm() {
       const tgData = await tgRes.json();
 
       if (!tgRes.ok) {
-        // 텔레그램 알림이 안 오는 핵심 원인을 팝업창으로 바로 확인 가능하게 변경
-        alert(`신청은 완료되었으나, 텔레그램 알림 실패: ${tgData.error || "서버 응답 오류"}`);
+        alert(`신청은 완료되었으나, 텔레그램 알림 실패: ${tgData.error || "알 수 없는 오류"}`);
       } else {
-        alert("무료 안심조회 신청이 완료되었습니다.");
+        alert("신청이 완료되었습니다.");
       }
 
       setFormData({
@@ -126,7 +125,6 @@ export default function BottomForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-2">
-          {/* 성함 */}
           <input
             type="text"
             name="name"
@@ -137,7 +135,6 @@ export default function BottomForm() {
             required
           />
 
-          {/* 직업 선택 */}
           <select
             name="job"
             value={formData.job}
@@ -155,7 +152,6 @@ export default function BottomForm() {
             ))}
           </select>
 
-          {/* 연락처 */}
           <input
             type="tel"
             name="phone"
@@ -167,7 +163,6 @@ export default function BottomForm() {
             required
           />
 
-          {/* 희망금액 */}
           <input
             type="text"
             name="amount"
@@ -178,7 +173,6 @@ export default function BottomForm() {
             required
           />
 
-          {/* 약관 동의 */}
           <div className="flex items-center gap-2 pt-0.5">
             <input
               type="checkbox"
@@ -197,7 +191,6 @@ export default function BottomForm() {
             </label>
           </div>
 
-          {/* 제출 버튼 */}
           <button
             type="submit"
             disabled={loading}
