@@ -71,16 +71,16 @@ export default function BottomForm() {
       ]);
 
       if (dbError) {
-        console.error("Supabase DB 저장 실패:", dbError);
+        console.error("Supabase Error:", dbError);
       }
 
-      // 2. 텔레그램 메시지 발송 API 호출
+      // 2. 텔레그램 메시지 발송 API 호출 및 응답 확인
       const telegramMessage = `
 [골드론 무료안심조회 신규 신청]
-• 성함: ${formData.name}
-• 직업: ${formData.job}
-• 연락처: ${formData.phone}
-• 희망금액: ${formData.amount}
+- 성함: ${formData.name}
+- 직업: ${formData.job}
+- 연락처: ${formData.phone}
+- 희망금액: ${formData.amount}
       `.trim();
 
       const tgRes = await fetch("/api/telegram", {
@@ -92,7 +92,8 @@ export default function BottomForm() {
       const tgData = await tgRes.json();
 
       if (!tgRes.ok) {
-        alert(`신청은 등록되었으나, 텔레그램 알림 오류: ${tgData.error}`);
+        // 텔레그램 알림이 안 오는 핵심 원인을 팝업창으로 바로 확인 가능하게 변경
+        alert(`신청은 완료되었으나, 텔레그램 알림 실패: ${tgData.error || "서버 응답 오류"}`);
       } else {
         alert("무료 안심조회 신청이 완료되었습니다.");
       }
