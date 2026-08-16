@@ -1,237 +1,149 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { createClient } from "@supabase/supabase-react"; // 프로젝트의 Supabase 클라이언트 경로로 맞추어 사용
 
-export default function BottomForm() {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [amount, setAmount] = useState("");
-  const [agree, setAgree] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function ApplicationForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    job: "", // 1. 직업 선택 상태
+    phone: "",
+    amount: "",
+    agreed: false,
+  });
 
-  const handleSubmit = async () => {
-    if (!name.trim()) {
-      alert("이름을 입력해주세요.");
-      return;
+  // 직업 목록
+  const jobOptions = [
+    "무직",
+    "프리랜서",
+    "아르바이트",
+    "직장인",
+    "공무원",
+    "개인사업자",
+    "법인사업자",
+    "기타",
+  ];
+
+  // 2, 3. 전화번호 입력 시 숫자만 추출 후 010-0000-0000 자동 하이픈 포맷팅
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
+    let formattedPhone = rawValue;
+
+    if (rawValue.length > 3 && rawValue.length <= 7) {
+      formattedPhone = `${rawValue.slice(0, 3)}-${rawValue.slice(3)}`;
+    } else if (rawValue.length > 7) {
+      formattedPhone = `${rawValue.slice(0, 3)}-${rawValue.slice(3, 7)}-${rawValue.slice(7, 11)}`;
     }
 
-    if (!phone.trim()) {
-      alert("연락처를 입력해주세요.");
-      return;
+    setFormData((prev) => ({ ...prev, phone: formattedPhone }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
-
-    if (!amount) {
-      alert("희망금액을 선택해주세요.");
-      return;
-    }
-
-    if (!agree) {
-      alert("개인정보 수집 및 이용에 동의해주세요.");
-      return;
-    }
-
-    setLoading(true);
-
-    const { error } = await supabase.from("applications").insert([
-      {
-        name,
-        phone,
-        amount,
-      },
-    ]);
-
-    if (error) {
-      setLoading(false);
-      alert(error.message);
-      return;
-    }
-
-    try {
-      await fetch("/api/telegram", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          phone,
-          amount,
-        }),
-      });
-    } catch (e) {
-      console.log(e);
-    }
-
-    alert("무료 안심조회 신청이 완료되었습니다.");
-
-    setName("");
-    setPhone("");
-    setAmount("");
-    setAgree(false);
-    setLoading(false);
   };
 
   return (
-    <div
-  id="bottom-form"
-  className="fixed bottom-0 left-0 w-full bg-white border-t-2 border-[#C9A227] shadow-2xl z-50"
->
-      <div className="max-w-5xl mx-auto px-3 py-1">
-
-        <div className="flex flex-col gap-1.5">
-
-          <div className="lg:min-w-[170px] text-center lg:text-left">
-
-           <h3 className="text-lg font-black text-[#C9A227]">
-              GOLDLOAN
-            </h3>
-
-            <p className="text-xs font-semibold text-gray-700">
-              무료 안심조회
-            </p>
-
-          </div>
-                    <input
-            type="text"
-            placeholder="이름"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="
-              w-full
-              flex-1
-              rounded-xl
-              border-2
-              border-[#C9A227]
-              bg-white
-              px-4
-              py-1.5
-              text-[15px]
-              font-bold
-              text-black
-              placeholder:text-gray-400
-              focus:outline-none
-              focus:ring-2
-              focus:ring-[#C9A227]
-            "
-            style={{
-              color: "#111827",
-              WebkitTextFillColor: "#111827",
-            }}
-          />
-
-          <input
-            type="tel"
-            placeholder="연락처"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="
-              w-full
-              flex-1
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-white
-              px-4
-              py-2
-              text-[15px]
-              font-bold
-              text-black
-              placeholder:text-gray-400
-              focus:outline-none
-              focus:ring-2
-              focus:ring-[#C9A227]
-            "
-            style={{
-              color: "#111827",
-              WebkitTextFillColor: "#111827",
-            }}
-          />
-
-          <select
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="
-              w-full
-              flex-1
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-white
-              px-4
-              py-2
-              text-[15px]
-              font-bold
-              text-black
-              focus:outline-none
-              focus:ring-2
-              focus:ring-[#C9A227]
-            "
-          >
-            <option value="">희망금액 선택</option>
-            <option value="100만원 이하">100만원 이하</option>
-            <option value="300만원">300만원</option>
-            <option value="500만원">500만원</option>
-            <option value="1000만원 이상">1,000만원 이상</option>
-            <option value="상담 후 결정">상담 후 결정</option>
-          </select>
-       <label
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    width: "100%",
-    padding: "4px 0",
-  }}
->
-  <input
-    type="checkbox"
-    checked={agree}
-    onChange={(e) => setAgree(e.target.checked)}
-    style={{
-      width: "20px",
-height: "20px",
-      accentColor: "#C9A227",
-      flexShrink: 0,
-    }}
-  />
-
-  <span
-    style={{
-      color: "#111827",
-      fontWeight: 700,
-      fontSize: "14px",
-    }}
-  >
-    개인정보 수집 및 이용에 동의합니다.
-  </span>
-</label>
-                    <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={loading}
-            className="
-              w-full
-              lg:w-auto
-              rounded-xl
-              bg-[#C9A227]
-              px-6
-              py-2
-              text-white
-              text-base
-              font-bold
-              shadow-lg
-              transition
-              hover:bg-yellow-600
-              disabled:opacity-50
-              disabled:cursor-not-allowed
-            "
-          >
-            {loading ? "신청중..." : "무료 안심조회"}
-          </button>
-
-        </div>
+    <form className="space-y-4 max-w-md mx-auto p-4 bg-white rounded-xl shadow">
+      {/* 4. 이름 -> 성함으로 변경 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          성함
+        </label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="성함을 입력해주세요"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
+          required
+        />
       </div>
-    </div>
+
+      {/* 1. 직업 선택 드롭다운 (Select) */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          직업
+        </label>
+        <select
+          name="job"
+          value={formData.job}
+          onChange={handleChange}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] bg-white"
+          required
+        >
+          <option value="">직업을 선택해주세요</option>
+          {jobOptions.map((job) => (
+            <option key={job} value={job}>
+              {job}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* 2, 3. 휴대폰 번호 입력란 (숫자 전용 & 자동 하이픈) */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          휴대폰 번호
+        </label>
+        <input
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handlePhoneChange}
+          placeholder="010-0000-0000"
+          maxLength={13}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
+          required
+        />
+      </div>
+
+      {/* 대출 희망 금액 입력란 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          대출 희망 금액
+        </label>
+        <input
+          type="text"
+          name="amount"
+          value={formData.amount}
+          onChange={handleChange}
+          placeholder="예: 300만원"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
+          required
+        />
+      </div>
+
+      {/* 개인정보 동의 */}
+      <div className="flex items-center gap-2 pt-2">
+        <input
+          type="checkbox"
+          id="agreed"
+          name="agreed"
+          checked={formData.agreed}
+          onChange={handleChange}
+          className="w-4 h-4 text-[#C9A227] rounded focus:ring-[#C9A227]"
+          required
+        />
+        <label htmlFor="agreed" className="text-sm text-gray-600">
+          개인정보 수집 및 이용에 동의합니다.
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-4 bg-[#C9A227] text-white font-bold rounded-lg hover:bg-[#b08e20] transition-colors text-lg"
+      >
+        신청하기
+      </button>
+    </form>
   );
 }

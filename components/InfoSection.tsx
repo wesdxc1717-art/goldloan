@@ -1,7 +1,7 @@
 export default function InfoSection() {
   return (
-    <section className="bg-gray-50 py-8 pb-96">
-      <div className="max-w-5xl mx-auto px-4">
+    <section className="bg-gray-50 py-8">
+      <div className="max-w-5xl mx-auto px-4 pb-[420px] lg:pb-[320px]">
 
         <h2 className="text-2xl font-bold text-[#C9A227] mb-5">
           대출 안내 및 유의사항
@@ -58,19 +58,9 @@ export default function InfoSection() {
           </p>
 
           <div className="mt-5 border-t pt-4 text-red-600 font-semibold text-sm space-y-2">
-
-            <p>
-              과도한 빚은 당신에게 큰 불행을 안겨줄 수 있습니다.
-            </p>
-
-            <p>
-              중개수수료를 요구하거나 받는 것은 불법입니다.
-            </p>
-
-            <p>
-              대출 시 귀하의 신용평점이 하락할 수 있습니다.
-            </p>
-
+            <p>과도한 빚은 당신에게 큰 불행을 안겨줄 수 있습니다.</p>
+            <p>중개수수료를 요구하거나 받는 것은 불법입니다.</p>
+            <p>대출 시 귀하의 신용평점이 하락할 수 있습니다.</p>
           </div>
 
         </div>
