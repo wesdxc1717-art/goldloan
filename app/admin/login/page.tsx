@@ -87,7 +87,8 @@ const text = `🔔 GOLDLOAN 신규 신청
       await fetch("/api/telegram", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: telegramMessage }),
+        // 텔레그램으로 보낼 text 변수가 선언되어 있다면 text를 전달
+body: JSON.stringify({ telegramMessage: text }),
       }).catch((err) => console.error("Telegram API Error:", err));
 
       alert("신청이 완료되었습니다.");
