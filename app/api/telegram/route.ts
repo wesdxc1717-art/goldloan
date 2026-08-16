@@ -34,10 +34,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "서버 연동 오류" },
-      { status: 500 }
-    );
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "알 수 없는 오류";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

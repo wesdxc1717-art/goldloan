@@ -5,96 +5,17 @@
   --foreground: #111827;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 body {
   background: #ffffff;
   color: #111827;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* =========================
-   입력창 (체크박스 제외)
-========================= */
-
-input:not([type="checkbox"]):not([type="radio"]),
-textarea,
-select {
-  width: 100%;
-  background: #ffffff !important;
-  color: #111827 !important;
-  -webkit-text-fill-color: #111827 !important;
-  caret-color: #111827 !important;
-
-  font-size: 16px !important;
-  font-weight: 700 !important;
-
-  border-radius: 12px;
-
-  opacity: 1 !important;
-
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #6b7280 !important;
-  opacity: 1 !important;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  color: #111827 !important;
-  background: #ffffff !important;
-  -webkit-text-fill-color: #111827 !important;
-  outline: none;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-select:-webkit-autofill {
+input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px white inset !important;
   -webkit-text-fill-color: #111827 !important;
-}
-
-/* =========================
-   체크박스 강제 복구
-========================= */
-
-input[type="checkbox"] {
-  width: 24px !important;
-  height: 24px !important;
-  appearance: auto !important;
-  -webkit-appearance: checkbox !important;
-  accent-color: #C9A227;
-}
-
-/* =========================
-   체크박스 글씨
-========================= */
-
-label {
-  color: #111827 !important;
-}
-
-label span {
-  color: #111827 !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
-}
-
-/* 선택박스 */
-
-select option {
-  color: #111827;
-  background: #ffffff;
 }
