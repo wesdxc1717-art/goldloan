@@ -76,13 +76,13 @@ export default function BottomForm() {
       }
 
       // 2. 텔레그램 알림 발송 (API 호출)
-      const telegramMessage = `
-[골드론 무료안심조회 신규 신청]
-- 성함: ${formData.name}
-- 직업: ${formData.job}
-- 연락처: ${formData.phone}
-- 희망금액: ${formData.amount}
-      `.trim();
+      // 기존 메시지 생성 부분을 찾아 아래로 교체
+const text = `🔔 GOLDLOAN 신규 신청
+
+👤 이름 : ${formData.name}
+💼 직업 : ${formData.job}
+📞 연락처 : ${formData.phone}
+💰 희망금액 : ${formData.amount}`.trim();
 
       await fetch("/api/telegram", {
         method: "POST",

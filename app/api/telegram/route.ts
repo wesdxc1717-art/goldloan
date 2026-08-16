@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
+    const { message, telegramMessage } = await req.json();
 
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -14,28 +14,26 @@ export async function POST(req: Request) {
       );
     }
 
+    const textToSend = telegramMessage || message;
+
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: CHAT_ID,
-        text: message,
+        text: textToSend,
       }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: data.description || "텔레그램 메시지 전송 실패" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: data.description }, { status: response.status });
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : "알 수 없는 오류";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
