@@ -60,7 +60,7 @@ export default function BottomForm() {
     setLoading(true);
 
     try {
-      // 1. Supabase 저장 (DB 에러 무시)
+      // 1. Supabase 저장
       const { error: dbError } = await supabase.from("applications").insert([
         {
           name: formData.name,
@@ -82,12 +82,17 @@ export default function BottomForm() {
 📞 연락처 : ${formData.phone}
 💰 희망금액 : ${formData.amount}`.trim();
 
-      // 3. 텔레그램 알림 발송
-      await fetch("/api/telegram", {
+      // 3. 텔레그램 알림 발송 요청
+      const res = await fetch("/api/telegram", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ telegramMessage: text }),
       });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error("Telegram API Error:", resData);
+      }
 
       alert("신청이 완료되었습니다.");
 

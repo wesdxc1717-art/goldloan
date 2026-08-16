@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import * as XLSX from "xlsx";
 
 export default function AdminPage() {
@@ -11,7 +11,6 @@ export default function AdminPage() {
   useEffect(() => {
     fetchApplications();
 
-    // 3초마다 자동 새로고침
     const interval = setInterval(() => {
       fetchApplications();
     }, 3000);
@@ -43,7 +42,7 @@ export default function AdminPage() {
     const excelData = filteredApplications.map((item) => ({
       번호: item.id,
       성함: item.name,
-      직업: item.job, // 직업 추가
+      직업: item.job,
       연락처: item.phone,
       희망금액: item.amount,
       신청시간: new Date(item.created_at).toLocaleString("ko-KR"),
@@ -81,7 +80,6 @@ export default function AdminPage() {
         신청자 목록
       </h1>
 
-      {/* 신청 건수 */}
       <div className="flex gap-5 mb-8">
         <div className="bg-blue-600 text-white rounded-xl p-6 w-56">
           <p className="text-sm">총 신청</p>
@@ -98,7 +96,6 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* 검색 + 엑셀 */}
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"

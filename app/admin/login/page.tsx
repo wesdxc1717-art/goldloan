@@ -1,15 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // 로그인 처리 로직
-    alert("로그인 시도");
+    // 실제 운영 환경에 맞는 아이디/비밀번호 검증 로직 추가 가능
+    if (id === "admin" && password === "password123") {
+      router.push("/admin");
+    } else {
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    }
   };
 
   return (
