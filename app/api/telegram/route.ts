@@ -2,57 +2,41 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { name, phone, amount } = await req.json();
+    const { message } = await req.json();
 
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
+    const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-    if (!botToken) {
+    if (!BOT_TOKEN || !CHAT_ID) {
       return NextResponse.json(
-        { error: "TELEGRAM_BOT_TOKEN이 없습니다." },
+        { error: "TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID 환경변수가 설정되지 않았습니다." },
         { status: 500 }
       );
     }
 
-    if (!chatId) {
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
       return NextResponse.json(
-        { error: "TELEGRAM_CHAT_ID가 없습니다." },
+        { error: data.description || "텔레그램 메시지 전송 실패" },
         { status: 500 }
       );
     }
 
-    const text = `
-🔔 GOLDLOAN 신규 신청
-
-👤 이름 : ${name}
-📞 연락처 : ${phone}
-💰 희망금액 : ${amount}
-`;
-
-    const response = await fetch(
-      `https://api.telegram.org/bot${botToken}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-        }),
-      }
-    );
-
-    const result = await response.json();
-
-    console.log("Telegram Result:", result);
-
-    return NextResponse.json(result);
-  } catch (err) {
-    console.error(err);
-
+    return NextResponse.json({ success: true, data });
+  } catch (error: any) {
     return NextResponse.json(
-      { error: "Telegram Error" },
+      { error: error.message || "서버 연동 오류" },
       { status: 500 }
     );
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function BottomForm() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ export default function BottomForm() {
     amount: "",
     agreed: false,
   });
+
+  const [loading, setLoading] = useState(false);
 
   const jobOptions = [
     "무직",
@@ -53,14 +56,65 @@ export default function BottomForm() {
       alert("개인정보 수집 및 이용에 동의해주세요.");
       return;
     }
-    alert("신청이 완료되었습니다.");
+
+    setLoading(true);
+
+    try {
+      // 1. Supabase DB 저장
+      const { error: dbError } = await supabase.from("applications").insert([
+        {
+          name: formData.name,
+          job: formData.job,
+          phone: formData.phone,
+          amount: formData.amount,
+        },
+      ]);
+
+      if (dbError) {
+        console.error("Supabase DB 저장 실패:", dbError);
+      }
+
+      // 2. 텔레그램 메시지 발송 API 호출
+      const telegramMessage = `
+[골드론 무료안심조회 신규 신청]
+• 성함: ${formData.name}
+• 직업: ${formData.job}
+• 연락처: ${formData.phone}
+• 희망금액: ${formData.amount}
+      `.trim();
+
+      const tgRes = await fetch("/api/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: telegramMessage }),
+      });
+
+      const tgData = await tgRes.json();
+
+      if (!tgRes.ok) {
+        alert(`신청은 등록되었으나, 텔레그램 알림 오류: ${tgData.error}`);
+      } else {
+        alert("무료 안심조회 신청이 완료되었습니다.");
+      }
+
+      setFormData({
+        name: "",
+        job: "",
+        phone: "",
+        amount: "",
+        agreed: false,
+      });
+    } catch (err) {
+      console.error(err);
+      alert("신청 처리 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    /* fixed bottom-0 z-50 속성을 추가하여 화면 하단에 고정 */
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] p-4 max-h-[90vh] overflow-y-auto">
       <div className="w-full max-w-4xl mx-auto">
-        {/* 상단 타이틀 */}
         <div className="mb-2">
           <h2 className="text-lg font-extrabold text-[#C9A227] tracking-wider leading-none">
             GOLDLOAN
@@ -123,7 +177,7 @@ export default function BottomForm() {
             required
           />
 
-          {/* 개인정보 동의 */}
+          {/* 약관 동의 */}
           <div className="flex items-center gap-2 pt-0.5">
             <input
               type="checkbox"
@@ -145,9 +199,10 @@ export default function BottomForm() {
           {/* 제출 버튼 */}
           <button
             type="submit"
-            className="w-full py-3 bg-[#C9A227] hover:bg-[#b08e20] text-white font-bold text-base rounded-2xl shadow-md transition-colors"
+            disabled={loading}
+            className="w-full py-3 bg-[#C9A227] hover:bg-[#b08e20] text-white font-bold text-base rounded-2xl shadow-md transition-colors disabled:bg-gray-400"
           >
-            무료 안심조회
+            {loading ? "처리 중..." : "무료 안심조회"}
           </button>
         </form>
       </div>

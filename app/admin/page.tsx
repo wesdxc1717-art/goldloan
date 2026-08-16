@@ -42,14 +42,14 @@ export default function AdminPage() {
   function downloadExcel() {
     const excelData = filteredApplications.map((item) => ({
       번호: item.id,
-      이름: item.name,
+      성함: item.name,
+      직업: item.job, // 직업 추가
       연락처: item.phone,
       희망금액: item.amount,
       신청시간: new Date(item.created_at).toLocaleString("ko-KR"),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
-
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
@@ -77,14 +77,12 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-7xl mx-auto p-10">
-
       <h1 className="text-4xl font-bold mb-8">
         신청자 목록
       </h1>
 
       {/* 신청 건수 */}
       <div className="flex gap-5 mb-8">
-
         <div className="bg-blue-600 text-white rounded-xl p-6 w-56">
           <p className="text-sm">총 신청</p>
           <h2 className="text-4xl font-bold">
@@ -98,15 +96,13 @@ export default function AdminPage() {
             {todayCount}건
           </h2>
         </div>
-
       </div>
 
       {/* 검색 + 엑셀 */}
       <div className="flex justify-between items-center mb-6">
-
         <input
           type="text"
-          placeholder="이름 또는 연락처 검색"
+          placeholder="성함 또는 연락처 검색"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="border rounded-lg px-4 py-3 w-80"
@@ -118,72 +114,56 @@ export default function AdminPage() {
         >
           엑셀 다운로드
         </button>
-
       </div>
 
       <table className="w-full border border-gray-300">
-
         <thead className="bg-gray-100">
-
           <tr>
             <th className="border p-3">번호</th>
-            <th className="border p-3">이름</th>
+            <th className="border p-3">성함</th>
+            <th className="border p-3">직업</th>
             <th className="border p-3">연락처</th>
             <th className="border p-3">희망금액</th>
             <th className="border p-3">신청시간</th>
           </tr>
-
         </thead>
 
         <tbody>
-
           {filteredApplications.length === 0 ? (
-
             <tr>
               <td
-                colSpan={5}
+                colSpan={6}
                 className="border p-10 text-center text-gray-500"
               >
                 검색 결과가 없습니다.
               </td>
             </tr>
-
           ) : (
-
             filteredApplications.map((item) => (
-
               <tr key={item.id}>
-
                 <td className="border p-3 text-center">
                   {item.id}
                 </td>
-
                 <td className="border p-3">
                   {item.name}
                 </td>
-
+                <td className="border p-3">
+                  {item.job}
+                </td>
                 <td className="border p-3">
                   {item.phone}
                 </td>
-
                 <td className="border p-3">
                   {item.amount}
                 </td>
-
                 <td className="border p-3">
                   {new Date(item.created_at).toLocaleString("ko-KR")}
                 </td>
-
               </tr>
-
             ))
-
           )}
-
         </tbody>
-
       </table>
-
     </div>
   );
 }
