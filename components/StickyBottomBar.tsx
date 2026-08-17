@@ -24,6 +24,13 @@ export default function StickyBottomBar() {
     }
   };
 
+  // 희망금액 숫자만 입력 및 천 단위 쉼표 포맷팅 함수
+  const formatAmount = (value: string) => {
+    const numbers = value.replace(/[^\d]/g, '');
+    if (!numbers) return '';
+    return Number(numbers).toLocaleString('ko-KR');
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
@@ -31,6 +38,11 @@ export default function StickyBottomBar() {
       setFormData({
         ...formData,
         phone: formatPhoneNumber(value),
+      });
+    } else if (name === 'amount') {
+      setFormData({
+        ...formData,
+        amount: formatAmount(value),
       });
     } else {
       setFormData({
@@ -85,7 +97,7 @@ export default function StickyBottomBar() {
             <option value="무직자">무직자/기타</option>
           </select>
 
-          {/* 연락처 (자동 하이픈 적용) */}
+          {/* 연락처 */}
           <input
             type="tel"
             name="phone"
@@ -97,11 +109,11 @@ export default function StickyBottomBar() {
             className="bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#C9A227]"
           />
 
-          {/* 희망금액 */}
+          {/* 희망금액 (숫자만 입력 및 쉼표 자동 적용) */}
           <input
             type="text"
             name="amount"
-            placeholder="희망금액"
+            placeholder="희망금액 (원)"
             value={formData.amount}
             onChange={handleChange}
             required
