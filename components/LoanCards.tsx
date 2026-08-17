@@ -1,67 +1,81 @@
-const loans = [
-  { title: "직장인대출", icon: "👨‍💼" },
-  { title: "사업자대출", icon: "🏢" },
-  { title: "무직자대출", icon: "🧑" },
-  { title: "비상금대출", icon: "💳" },
-  { title: "저신용대출", icon: "⭐" },
-  { title: "개인회생대출", icon: "📄" },
-];
+export default function LoanTypesSection() {
+  const loanTypes = [
+    {
+      title: "무직자",
+      desc: "소득이 없어도 가능한 상품 여부를 상담해드립니다. 신용 상태에 맞는 상품을 안내해드립니다.",
+      badge: null,
+    },
+    {
+      title: "저신용자",
+      desc: "신용점수가 낮아도 가능한 상품을 확인해드립니다. 현재 조건에 맞는 상담을 도와드립니다.",
+      badge: null,
+    },
+    {
+      title: "직장인",
+      desc: "재직기간, 소득에 맞춘 맞춤 상담. 신속한 한도 및 가능 여부 안내",
+      badge: null,
+    },
+    {
+      title: "사업자",
+      desc: "개인사업자·법인사업자 상담\n운영자금·시설자금 상담 가능",
+      badge: ["초기사업자", "자영업자"],
+    },
+    {
+      title: "주부",
+      desc: "배우자 소득 및 개인 조건에 맞는 상품 상담\n가능 여부 무료 확인",
+      badge: null,
+    },
+    {
+      title: "프리랜서",
+      desc: "소득 증빙이 가능한 프리랜서 상담\n맞춤 한도 안내",
+      badge: null,
+    },
+  ];
 
-export default function LoanCards() {
   return (
-    <section className="bg-[#fafafa] py-24">
-      <div className="max-w-7xl mx-auto px-6">
-
-        <h2 className="text-5xl font-black text-center text-gray-900">
-          GOLDLOAN 상품안내
+    <section className="bg-white text-gray-900 py-16 px-4">
+      <div className="max-w-5xl mx-auto text-center">
+        {/* 상단 브랜딩 및 타이틀 */}
+        <p className="text-[#C9A227] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-2">
+          GOLDLOAN FINANCIAL SOLUTION
+        </p>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+          맞춤 대출 솔루션
         </h2>
-
-        <p className="text-center text-gray-500 mt-5 mb-16 text-lg">
-          고객님의 상황에 맞는 금융상품을 안내해드립니다.
+        <p className="text-gray-500 text-sm md:text-base mb-12">
+          고객님의 상황에 맞는 최적의 상품을 찾아드리겠습니다.
         </p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* 6개 카드 그리드 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {loanTypes.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:border-[#C9A227] hover:shadow-[0_4px_20px_rgba(201,162,39,0.15)] transition-all group"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#C9A227] transition-colors">
+                {item.title}
+              </h3>
 
-          {loans.map((loan) => {
-            const isBusiness = loan.title === "사업자대출";
-
-            return (
-              <div
-                key={loan.title}
-                className="bg-white rounded-3xl p-10 shadow hover:-translate-y-2 hover:shadow-2xl transition"
-              >
-                <div className="text-6xl mb-6">
-                  {loan.icon}
+              {item.badge && (
+                <div className="flex gap-2 mb-3">
+                  {item.badge.map((b, i) => (
+                    <span
+                      key={i}
+                      className="text-xs border border-[#C9A227] text-[#C9A227] bg-[#FDFBF7] px-2.5 py-1 rounded-md font-medium"
+                    >
+                      {b}
+                    </span>
+                  ))}
                 </div>
+              )}
 
-                <h3 className="text-2xl font-bold">
-                  {loan.title}
-                </h3>
-
-                <div className="mt-6 space-y-2 text-gray-600">
-
-  {loan.title === "사업자대출" ? (
-    <>
-      <p>✔ 초기사업자도 OK</p>
-      <p>✔ 단기 운영자금도 OK</p>
-      <p>✔ 상담 후 결정</p>
-      <p>✔ 간편 상담 가능</p>
-    </>
-  ) : (
-    <>
-      <p>✔ 최소 10만원부터</p>
-      <p>✔ 상담 후 결정</p>
-      <p>✔ 간편 상담 가능</p>
-    </>
-  )}
-
-</div>
-              </div>
-            );
-          })}
-
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
-
       </div>
     </section>
   );
