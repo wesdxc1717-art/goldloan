@@ -18,16 +18,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. 이미 조합된 텍스트가 있거나, 2. 개별 필드가 넘어온 경우를 모두 처리
+    // 기존의 이모티콘 형식을 살린 메시지 양식 적용
     let textToSend = telegramMessage || message;
 
     if (!textToSend && name) {
       textToSend = `
-[새로운 무료 안심조회 신청]
-- 성함: ${name}
-- 직업: ${job || '선택 안 함'}
-- 연락처: ${phone}
-- 희망금액: ${amount}원
+🔔 GOLDLOAN 신규 신청
+
+👤 이름: ${name}
+💼 직업: ${job || '선택 안 함'}
+📞 연락처: ${phone}
+💰 희망금액: ${amount}원
       `.trim();
     }
 
