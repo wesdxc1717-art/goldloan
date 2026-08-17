@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { message, telegramMessage } = await req.json();
+    const body = await req.json();
+    console.log("📥 받은 요청 데이터:", body); // Vercel 로그에서 확인용
+
+    const { message, telegramMessage } = body;
 
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (!BOT_TOKEN || !CHAT_ID) {
+      console.error("❌ 환경변수 누락");
       return NextResponse.json(
         { error: "TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID 환경변수가 설정되지 않았습니다." },
         { status: 500 }
@@ -15,6 +19,14 @@ export async function POST(req: Request) {
     }
 
     const textToSend = telegramMessage || message;
+
+    if (!textToSend) {
+      console.error("❌ 전송할 텍스트가 없음. 받은 데이터:", body);
+      return NextResponse.json(
+        { error: "전송할 메시지 내용이 없습니다." },
+        { status: 400 }
+      );
+    }
 
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
     const response = await fetch(url, {
@@ -29,11 +41,13 @@ export async function POST(req: Request) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error("❌ 텔레그램 API 거부:", data);
       return NextResponse.json({ error: data.description }, { status: response.status });
     }
 
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
+    console.error("❌ 서버 에러:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

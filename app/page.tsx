@@ -1,17 +1,15 @@
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import LoanCards from "../components/LoanCards";
-import InfoSection from "../components/InfoSection";
-import BottomForm from "../components/BottomForm";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import BottomForm from "@/components/BottomForm";
 
 export default function Home() {
   return (
-    <>
+    <main className="min-h-screen bg-white pb-32">
       <Header />
       <Hero />
-      <LoanCards />
-      <InfoSection />
-      <BottomForm />
-    </>
+      <div id="bottom-form">
+        <BottomForm />
+      </div>
+    </main>
   );
 }
