@@ -147,6 +147,7 @@ export default function BottomForm() {
             required
           />
 
+          {/* 직업 선택 드롭다운 복구 완료 */}
           <select
             name="job"
             value={formData.job}
