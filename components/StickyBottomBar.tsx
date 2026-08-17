@@ -10,6 +10,8 @@ export default function StickyBottomBar() {
     amount: '',
   });
 
+  const [loading, setLoading] = useState(false);
+
   // 전화번호 자동 하이픈 포맷팅 함수
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/[^\d]/g, '');
@@ -52,9 +54,39 @@ export default function StickyBottomBar() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 🚀 텔레그램 전송 로직 추가
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('무료 안심조회가 신청되었습니다.');
+    if (loading) return;
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          job: formData.job,
+          phone: formData.phone,
+          amount: formData.amount,
+        }),
+      });
+
+      if (response.ok) {
+        alert('무료 안심조회 신청이 완료되었습니다. 빠른 시일내에 연락드리겠습니다.');
+        setFormData({ name: '', job: '', phone: '', amount: '' }); // 폼 초기화
+      } else {
+        alert('신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,7 +141,7 @@ export default function StickyBottomBar() {
             className="bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#C9A227]"
           />
 
-          {/* 희망금액 (숫자만 입력 및 쉼표 자동 적용) */}
+          {/* 희망금액 */}
           <input
             type="text"
             name="amount"
@@ -123,9 +155,10 @@ export default function StickyBottomBar() {
           {/* 무료안심조회 신청 버튼 */}
           <button
             type="submit"
-            className="col-span-2 md:col-span-1 bg-gradient-to-r from-[#DFB838] to-[#C9A227] text-white font-bold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-all text-sm whitespace-nowrap"
+            disabled={loading}
+            className="col-span-2 md:col-span-1 bg-gradient-to-r from-[#DFB838] to-[#C9A227] text-white font-bold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-all text-sm whitespace-nowrap disabled:opacity-50"
           >
-            무료안심조회
+            {loading ? '전송중...' : '무료안심조회'}
           </button>
         </form>
       </div>
