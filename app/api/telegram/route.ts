@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("📥 받은 요청 데이터:", body); // Vercel 로그에서 확인용
+    console.log("📥 받은 요청 데이터:", body);
 
-    const { message, telegramMessage } = body;
+    const { message, telegramMessage, name, job, phone, amount } = body;
 
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -18,7 +18,18 @@ export async function POST(req: Request) {
       );
     }
 
-    const textToSend = telegramMessage || message;
+    // 1. 이미 조합된 텍스트가 있거나, 2. 개별 필드가 넘어온 경우를 모두 처리
+    let textToSend = telegramMessage || message;
+
+    if (!textToSend && name) {
+      textToSend = `
+[새로운 무료 안심조회 신청]
+- 성함: ${name}
+- 직업: ${job || '선택 안 함'}
+- 연락처: ${phone}
+- 희망금액: ${amount}원
+      `.trim();
+    }
 
     if (!textToSend) {
       console.error("❌ 전송할 텍스트가 없음. 받은 데이터:", body);
