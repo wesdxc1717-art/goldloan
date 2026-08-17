@@ -1,23 +1,24 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero"; // 무료 안심조회 영역
-import LoanTypesSection from "@/components/LoanTypesSection"; // 👈 추가된 맞춤 대출 솔루션 영역
-import InfoSection from "@/components/InfoSection"; // 대출 안내 및 유의사항 영역
+import Hero from "@/components/Hero";
+import LoanTypesSection from "@/components/LoanTypesSection";
+import InfoSection from "@/components/InfoSection";
 import BottomForm from "@/components/BottomForm";
+import StickyBottomBar from "@/components/StickyBottomBar"; // 👈 1. 컴포넌트 임포트
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white pb-24"> {/* 👈 2. 하단 고정바에 가리지 않도록 하단 여백(pb-24) 추가 */}
       <Header />
       <Hero />
-      
-      {/* 무료 안심조회 바로 아래, 유의사항 바로 위에 삽입 */}
       <LoanTypesSection />
-
       <InfoSection />
 
       <div id="bottom-form">
         <BottomForm />
       </div>
+
+      {/* 3. 화면 하단 고정 바 삽입 */}
+      <StickyBottomBar />
     </main>
   );
 }
