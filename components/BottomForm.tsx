@@ -38,6 +38,18 @@ export default function BottomForm() {
     setFormData((prev) => ({ ...prev, phone: formattedPhone }));
   };
 
+  // 희망금액 숫자만 입력 및 천원 단위 콤마 자동 변환
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, "");
+    let formattedAmount = "";
+
+    if (rawValue) {
+      formattedAmount = Number(rawValue).toLocaleString();
+    }
+
+    setFormData((prev) => ({ ...prev, amount: formattedAmount }));
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -80,7 +92,7 @@ export default function BottomForm() {
 👤 이름 : ${formData.name}
 💼 직업 : ${formData.job}
 📞 연락처 : ${formData.phone}
-💰 희망금액 : ${formData.amount}`.trim();
+💰 희망금액 : ${formData.amount}원`.trim();
 
       // 3. 텔레그램 알림 발송 요청
       const res = await fetch("/api/telegram", {
@@ -113,7 +125,7 @@ export default function BottomForm() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] p-4 max-h-[90vh] overflow-y-auto">
+    <div className="relative w-full bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] p-4 mt-8 pb-10">
       <div className="w-full max-w-4xl mx-auto">
         <div className="mb-2">
           <h2 className="text-lg font-extrabold text-[#C9A227] tracking-wider leading-none">
@@ -167,8 +179,8 @@ export default function BottomForm() {
             type="text"
             name="amount"
             value={formData.amount}
-            onChange={handleChange}
-            placeholder="희망금액 선택"
+            onChange={handleAmountChange}
+            placeholder="희망금액 (숫자만 입력)"
             className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-2xl text-sm font-medium placeholder-gray-500 focus:outline-none focus:border-[#C9A227] transition-colors"
             required
           />
