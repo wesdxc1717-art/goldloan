@@ -10,16 +10,38 @@ export default function StickyBottomBar() {
     amount: '',
   });
 
+  // 전화번호 자동 하이픈 포맷팅 함수
+  const formatPhoneNumber = (value: string) => {
+    const numbers = value.replace(/[^\d]/g, '');
+    if (numbers.length <= 3) {
+      return numbers;
+    } else if (numbers.length <= 7) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    } else if (numbers.length <= 11) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+    } else {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    
+    if (name === 'phone') {
+      setFormData({
+        ...formData,
+        phone: formatPhoneNumber(value),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기에 기존 신청 로직(또는 텔레그램 연동 등)을 연결하시면 됩니다.
     alert('무료 안심조회가 신청되었습니다.');
   };
 
@@ -63,13 +85,14 @@ export default function StickyBottomBar() {
             <option value="무직자">무직자/기타</option>
           </select>
 
-          {/* 연락처 */}
+          {/* 연락처 (자동 하이픈 적용) */}
           <input
             type="tel"
             name="phone"
-            placeholder="연락처 (- 제외)"
+            placeholder="연락처 (010-0000-0000)"
             value={formData.phone}
             onChange={handleChange}
+            maxLength={13}
             required
             className="bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#C9A227]"
           />
